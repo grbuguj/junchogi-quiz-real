@@ -1,0 +1,822 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>정보처리기사 실기 기출퀴즈</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #ffffff;
+  --surface: #f8f9fb;
+  --surface2: #f1f3f7;
+  --surface3: #e9edf5;
+  --border: rgba(0,0,0,0.07);
+  --border2: rgba(0,0,0,0.12);
+  --text: #1a1d26;
+  --text2: #5c6375;
+  --text3: #9aa0b3;
+  --accent: #4f8ef7;
+  --accent2: #7b5cf0;
+  --green: #10b981;
+  --red: #ef4444;
+  --yellow: #f59e0b;
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 10%, rgba(79,142,247,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 30% at 80% 80%, rgba(123,92,240,0.07) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+.grid-pattern {
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,0,0,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+.wrap {
+  position: relative;
+  z-index: 1;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* Header */
+.app-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.logo-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, rgba(79,142,247,0.15), rgba(123,92,240,0.15));
+  border: 1px solid rgba(79,142,247,0.25);
+  border-radius: 20px;
+  padding: 3px 10px 3px 6px;
+  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+.logo-badge::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: blink 2s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+.logo h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+.logo p { font-size: 13px; color: var(--text2); font-weight: 300; margin-top: 2px; }
+
+/* Stats row */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 1.5rem;
+}
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  text-align: center;
+}
+.stat-num {
+  font-size: 24px; font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  line-height: 1; margin-bottom: 4px;
+}
+.stat-card:nth-child(1) .stat-num { color: var(--green); }
+.stat-card:nth-child(2) .stat-num { color: var(--red); }
+.stat-card:nth-child(3) .stat-num { color: var(--yellow); }
+.stat-label { font-size: 11px; color: var(--text3); letter-spacing: 0.5px; }
+
+/* Progress */
+.progress-wrap { margin-bottom: 1.5rem; }
+.progress-info {
+  display: flex; justify-content: space-between;
+  align-items: center; margin-bottom: 8px;
+}
+.progress-label { font-size: 12px; color: var(--text2); font-family: 'JetBrains Mono', monospace; }
+.progress-pct { font-size: 12px; color: var(--text3); font-family: 'JetBrains Mono', monospace; }
+.progress-track { height: 4px; background: var(--surface2); border-radius: 2px; overflow: hidden; }
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px; transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* Mode tabs */
+.mode-tabs {
+  display: flex; gap: 6px; margin-bottom: 1.5rem;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 4px;
+}
+.mode-tab {
+  flex: 1; padding: 8px 12px; border: none; border-radius: 6px;
+  background: transparent; color: var(--text3); font-size: 13px;
+  font-family: 'Noto Sans KR', sans-serif; cursor: pointer; transition: all 0.2s;
+}
+.mode-tab:hover { color: var(--text2); background: var(--surface3); }
+.mode-tab.active {
+  background: var(--surface3); color: var(--text); font-weight: 500;
+  box-shadow: inset 0 0 0 1px var(--border2);
+}
+
+/* Question card */
+.q-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  margin-bottom: 1rem;
+  position: relative; overflow: hidden;
+  transition: border-color 0.3s;
+  animation: slideIn 0.25s ease-out;
+}
+@keyframes slideIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+@keyframes shake { 0%,100%{transform:translateX(0)} 20%,60%{transform:translateX(-6px)} 40%,80%{transform:translateX(6px)} }
+.q-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  opacity: 0; transition: opacity 0.3s;
+}
+.q-card.answered::before { opacity: 1; }
+.q-card.correct-state { border-color: rgba(16,185,129,0.35); }
+.q-card.wrong-state { border-color: rgba(239,68,68,0.3); }
+.q-card.shake { animation: shake 0.35s ease-out; }
+
+.q-meta {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 1rem; flex-wrap: wrap; gap: 6px;
+}
+.q-meta-left { display: flex; align-items: center; gap: 6px; }
+.q-number {
+  font-size: 11px; font-family: 'JetBrains Mono', monospace;
+  color: var(--text3); background: var(--surface2);
+  border: 1px solid var(--border); border-radius: 20px; padding: 3px 10px;
+}
+.q-source {
+  font-size: 11px; color: var(--text3);
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 20px; padding: 3px 10px;
+  font-family: 'JetBrains Mono', monospace;
+}
+.q-cat-badge {
+  font-size: 11px; font-weight: 500; padding: 3px 10px;
+  border-radius: 20px; color: #fff;
+}
+.q-status-tag { font-size: 12px; font-weight: 600; }
+
+.q-text {
+  font-size: 15px; line-height: 1.75; color: var(--text);
+  margin-bottom: 1.25rem; font-weight: 400;
+}
+
+/* Hint */
+.hint-toggle {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--text3); background: none;
+  border: 1px solid var(--border); border-radius: 20px;
+  padding: 4px 12px; cursor: pointer; margin-bottom: 1rem;
+  font-family: 'Noto Sans KR', sans-serif; transition: all 0.2s;
+}
+.hint-toggle:hover { color: var(--accent); border-color: rgba(79,142,247,0.3); }
+.hint-box {
+  display: none;
+  background: rgba(79,142,247,0.06);
+  border: 1px solid rgba(79,142,247,0.15);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px; font-size: 13px;
+  color: var(--accent); margin-bottom: 1rem; font-style: italic;
+}
+
+/* Input */
+.input-area { display: flex; gap: 8px; margin-bottom: 12px; }
+.ans-input {
+  flex: 1; padding: 11px 14px;
+  background: var(--surface2); border: 1px solid var(--border2);
+  border-radius: var(--radius-sm); color: var(--text);
+  font-size: 14px; font-family: 'Noto Sans KR', sans-serif;
+  outline: none; transition: all 0.2s;
+}
+.ans-input::placeholder { color: var(--text3); }
+.ans-input:focus {
+  border-color: var(--accent); background: var(--surface3);
+  box-shadow: 0 0 0 3px rgba(79,142,247,0.1);
+}
+.ans-input:disabled { opacity: 0.6; cursor: not-allowed; }
+.check-btn {
+  padding: 11px 20px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border: none; border-radius: var(--radius-sm); color: #fff;
+  font-size: 13px; font-weight: 500;
+  font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer; transition: all 0.2s; white-space: nowrap;
+}
+.check-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+.check-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+/* Result */
+.result-area {
+  display: none; border-radius: var(--radius-sm); overflow: hidden;
+}
+.result-header {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 14px; font-size: 14px; font-weight: 500;
+}
+.result-area.correct .result-header {
+  background: rgba(16,185,129,0.1); color: var(--green);
+  border: 1px solid rgba(16,185,129,0.2);
+}
+.result-area.wrong .result-header {
+  background: rgba(239,68,68,0.07); color: var(--red);
+  border: 1px solid rgba(239,68,68,0.15);
+}
+.result-answer {
+  display: none; padding: 12px 14px;
+  background: var(--surface2); border: 1px solid var(--border); border-top: none;
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+}
+.result-answer-label {
+  font-size: 11px; color: var(--text3); margin-bottom: 6px;
+  font-family: 'JetBrains Mono', monospace; letter-spacing: 1px; text-transform: uppercase;
+}
+.result-answer-text { font-size: 14px; color: var(--text); line-height: 1.75; }
+
+/* Nav */
+.nav-area {
+  display: grid; grid-template-columns: 1fr auto 1fr;
+  gap: 8px; align-items: center;
+}
+.nav-btn {
+  padding: 11px 16px; background: var(--surface);
+  border: 1px solid var(--border2); border-radius: var(--radius-sm);
+  color: var(--text2); font-size: 13px;
+  font-family: 'Noto Sans KR', sans-serif; cursor: pointer;
+  transition: all 0.2s; display: flex; align-items: center; gap: 6px;
+}
+.nav-btn:hover { background: var(--surface2); color: var(--text); }
+.nav-btn.prev { justify-content: flex-start; }
+.nav-btn.next { justify-content: flex-end; }
+.skip-btn {
+  padding: 8px 14px; background: none;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  color: var(--text3); font-size: 12px;
+  font-family: 'Noto Sans KR', sans-serif; cursor: pointer;
+  transition: all 0.2s; white-space: nowrap;
+}
+.skip-btn:hover { color: var(--text2); border-color: var(--border2); }
+
+/* Footer */
+.footer-tools {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border);
+}
+.reset-btn {
+  padding: 7px 14px; background: none; border: 1px solid var(--border);
+  border-radius: var(--radius-sm); color: var(--text3); font-size: 12px;
+  font-family: 'Noto Sans KR', sans-serif; cursor: pointer; transition: all 0.2s;
+}
+.reset-btn:hover { border-color: rgba(239,68,68,0.4); color: var(--red); }
+.footer-info { font-size: 12px; color: var(--text3); font-family: 'JetBrains Mono', monospace; }
+
+/* Keyboard hints */
+.kbd-hints {
+  display: flex; gap: 12px; margin-top: 0.75rem;
+  padding: 8px 12px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+}
+.kbd-hint { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text3); }
+kbd {
+  background: var(--surface2); border: 1px solid var(--border2);
+  border-radius: 4px; padding: 1px 5px;
+  font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text2);
+}
+
+@media (max-width: 540px) {
+  .wrap { padding: 1.25rem 1rem 3rem; }
+  .q-card { padding: 1.25rem; }
+  .mode-tab { font-size: 12px; padding: 7px 8px; }
+  .kbd-hints { display: none; }
+  .q-text { font-size: 14px; }
+}
+</style>
+</head>
+<body>
+<div class="grid-pattern"></div>
+<div class="wrap">
+
+  <header class="app-header">
+    <div class="logo">
+      <div class="logo-badge">정보처리기사 실기</div>
+      <h1>이론 기출퀴즈</h1>
+      <p>2020~2025년 19회차 기출 이론문제 — 주관식 입력형</p>
+    </div>
+  </header>
+
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-num" id="sc-correct">0</div><div class="stat-label">정답</div></div>
+    <div class="stat-card"><div class="stat-num" id="sc-wrong">0</div><div class="stat-label">오답</div></div>
+    <div class="stat-card"><div class="stat-num" id="sc-skip">0</div><div class="stat-label">건너뜀</div></div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-info">
+      <span class="progress-label" id="prog-label">1 / 0</span>
+      <span class="progress-pct" id="prog-pct">0%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="prog-fill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <div class="mode-tabs">
+    <button class="mode-tab active" onclick="setMode('seq',this)">순서대로</button>
+    <button class="mode-tab" onclick="setMode('rand',this)">랜덤</button>
+    <button class="mode-tab" onclick="setMode('wrong',this)">틀린문제만</button>
+  </div>
+
+  <div id="q-container"></div>
+
+  <div class="nav-area">
+    <button class="nav-btn prev" onclick="go(-1)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15,18 9,12 15,6"/></svg>
+      이전
+    </button>
+    <button class="skip-btn" onclick="skipQ()">건너뛰기</button>
+    <button class="nav-btn next" onclick="go(1)">
+      다음
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg>
+    </button>
+  </div>
+
+  <div class="kbd-hints">
+    <div class="kbd-hint"><kbd>Enter</kbd> 정답 확인</div>
+    <div class="kbd-hint"><kbd>←</kbd><kbd>→</kbd> 이전 / 다음</div>
+    <div class="kbd-hint"><kbd>H</kbd> 힌트</div>
+  </div>
+
+  <div class="footer-tools">
+    <button class="reset-btn" onclick="resetAll()">↺ 처음부터</button>
+    <span class="footer-info" id="footer-info">문제를 풀어보세요</span>
+  </div>
+</div>
+
+<script>
+const CAT_COLOR = {
+  "소프트웨어공학": "#6366f1",
+  "보안":           "#ef4444",
+  "네트워크":       "#0891b2",
+  "데이터베이스":   "#ca8a04",
+  "운영체제":       "#7c3aed",
+  "신기술/용어":    "#059669"
+};
+
+const QS = [
+  // ── 2020-1 ──
+  {y:"2020",r:"1",n:"1",cat:"소프트웨어공학",q:"동일한 테스트 케이스로 반복 테스트하면 더 이상 새로운 결함을 발견할 수 없다는 테스트 원리를 무엇이라 하는가?",a:"살충제 패러독스 (Pesticide Paradox)",h:"반복 테스트의 한계"},
+  {y:"2020",r:"1",n:"2",cat:"신기술/용어",q:"대규모로 저장된 데이터 안에서 체계적이고 자동적으로 통계적 규칙이나 패턴을 찾아내는 기술은?",a:"데이터 마이닝 (Data Mining)",h:"대량 데이터 패턴 발견"},
+  {y:"2020",r:"1",n:"3",cat:"네트워크",q:"프로토콜의 기본 요소 3가지를 쓰시오.",a:"구문 (Syntax), 의미 (Semantics), 순서/타이밍 (Timing)",h:"구문/의미/시간"},
+  {y:"2020",r:"1",n:"4",cat:"신기술/용어",q:"웹 브라우저 간 HTML 데이터를 주고받을 때 사전에 정해진 태그 외에도 사용자가 임의로 태그를 정의할 수 있는 마크업 언어는?",a:"XML (eXtensible Markup Language)",h:"확장 가능한 마크업 언어"},
+  {y:"2020",r:"1",n:"5",cat:"신기술/용어",q:"속성-값 쌍(Attribute-Value Pair)으로 이루어진 데이터 오브젝트를 전달하기 위한 경량의 개방형 표준 데이터 포맷은?",a:"JSON (JavaScript Object Notation)",h:"키-값 쌍 텍스트 포맷"},
+  {y:"2020",r:"1",n:"7",cat:"데이터베이스",q:"트랜잭션 실행 중 오류가 발생하여 변경된 내용을 취소하고 트랜잭션 시작 전 상태로 되돌리는 연산은?",a:"ROLLBACK",h:"작업 취소, 이전 상태 복귀"},
+  {y:"2020",r:"1",n:"8",cat:"보안",q:"IP 계층(3계층)에서 무결성과 인증을 보장하는 인증헤더(AH)와 기밀성을 보장하는 암호화(ESP)를 이용하여 양 종단 간 보안 서비스를 제공하는 프로토콜은?",a:"IPSec (IP Security)",h:"IP 계층 보안"},
+  {y:"2020",r:"1",n:"9",cat:"소프트웨어공학",q:"소스 코드를 실행하지 않고 코드의 구조, 데이터 흐름 등을 분석하여 결함을 찾는 테스트 도구 유형은?",a:"정적 분석 도구",h:"실행 없이 분석"},
+  {y:"2020",r:"1",n:"10",cat:"소프트웨어공학",q:"한 객체의 상태가 바뀌면 그 객체에 의존하는 다른 객체들에게 통보(Notify)되고 자동으로 갱신되는 디자인 패턴은?",a:"Observer (옵서버) 패턴",h:"일대다 의존성, 상태 전파"},
+  {y:"2020",r:"1",n:"11",cat:"운영체제",q:"리눅스 커널 기반의 개방형 모바일 운영체제로, 구글에서 공개한 것은?",a:"안드로이드 (Android)",h:"모바일, 자바/코틀린"},
+  {y:"2020",r:"1",n:"13",cat:"신기술/용어",q:"HTTP, HTTPS, SMTP 등을 사용하여 XML 기반의 메시지를 교환하는 프로토콜은?",a:"SOAP (Simple Object Access Protocol)",h:"xml 기반 메시지 교환"},
+  {y:"2020",r:"1",n:"14",cat:"보안",q:"웹 응용 프로그램에서 입력란에 악의적인 SQL 구문을 삽입하여 데이터베이스를 비정상적으로 조작하는 공격 기법은?",a:"SQL Injection",h:"SQL 구문 삽입 공격"},
+  {y:"2020",r:"1",n:"15",cat:"운영체제",q:"리눅스에서 chmod 751 test.txt 실행 시 소유자, 그룹, 기타사용자의 권한을 각각 쓰시오.",a:"소유자: rwx / 그룹: r-x / 기타: --x",h:"rwx=7, r-x=5, --x=1"},
+  {y:"2020",r:"1",n:"16",cat:"소프트웨어공학",q:"사용자 인터페이스(UI) 설계 원칙 중, 사용자의 목적을 정확하게 달성할 수 있어야 한다는 원칙은?",a:"유효성 (Effectiveness)",h:"목적 달성"},
+  {y:"2020",r:"1",n:"19",cat:"소프트웨어공학",q:"기업 내 각종 애플리케이션 간 데이터를 연계·통합하는 EAI 유형 중, 중앙 집중형 방식으로 허브 시스템을 통해 데이터를 전송하는 방식은?",a:"Hub & Spoke",h:"허브 중앙집중"},
+  {y:"2020",r:"1",n:"20",cat:"신기술/용어",q:"웹 서비스의 기술, 프로토콜, 메시지 형식 등을 기술하는 XML 기반의 서비스 기술 언어는?",a:"WSDL (Web Services Description Language)",h:"웹서비스 기술 언어"},
+  // ── 2020-2 ──
+  {y:"2020",r:"2",n:"1",cat:"신기술/용어",q:"비상 사태 또는 업무 중단 시점으로부터 업무가 복구되어 다시 정상 가동될 때까지의 시간을 의미하는 용어는?",a:"RTO (Recovery Time Objective, 목표복구시간)",h:"복구까지 걸리는 시간"},
+  {y:"2020",r:"2",n:"3",cat:"신기술/용어",q:"자바스크립트를 사용하여 클라이언트와 서버 간에 XML 데이터를 비동기적으로 주고받는 기술은?",a:"AJAX (Asynchronous JavaScript and XML)",h:"비동기 부분 업데이트"},
+  {y:"2020",r:"2",n:"4",cat:"소프트웨어공학",q:"고객의 요구사항 변화에 유연하게 대응하기 위해 일정한 주기를 반복하면서 개발하는 소프트웨어 개발 방법론은?",a:"애자일 (Agile) 방법론",h:"워터폴의 반대, 반복적 사이클"},
+  {y:"2020",r:"2",n:"7",cat:"데이터베이스",q:"트랜잭션의 실행이 비정상적으로 종료되었을 때, 트랜잭션이 변경한 내용을 취소하고 이전 상태로 되돌리는 연산은?",a:"ROLLBACK",h:"작업 취소, 이전 상태 복귀"},
+  {y:"2020",r:"2",n:"8",cat:"보안",q:"네트워크 계층(3계층)에서 IP 패킷 단위의 데이터 변조 방지 및 은닉 기능을 제공하는 프로토콜은?",a:"IPSec (IP Security)",h:"IP 계층 보안"},
+  {y:"2020",r:"2",n:"16",cat:"소프트웨어공학",q:"UI 설계 원칙 중, 누구나 쉽게 이해하고 사용할 수 있어야 한다는 원칙은?",a:"직관성 (Intuitiveness)",h:"누구나 쉽게 이해"},
+  {y:"2020",r:"2",n:"19",cat:"네트워크",q:"국제표준화기구(ISO)에서 제정한 네트워크 통신 7계층 참조 모델의 이름을 쓰시오.",a:"OSI 7계층\n물리 → 데이터링크 → 네트워크 → 전송 → 세션 → 표현 → 응용",h:"7개 계층 순서"},
+  // ── 2020-3 ──
+  {y:"2020",r:"3",n:"1",cat:"소프트웨어공학",q:"XP(eXtreme Programming)의 5가지 핵심 가치를 쓰시오.",a:"용기(Courage), 단순성(Simplicity), 의사소통(Communication), 피드백(Feedback), 존중(Respect)\n암기: 용단의피존",h:"용단의피존"},
+  {y:"2020",r:"3",n:"2",cat:"소프트웨어공학",q:"개발자 관점에서 수행하는 테스트는 알파 테스트이고, 사용자가 실제 환경에서 수행하는 테스트는 ( )테스트이다.",a:"베타 테스트",h:"현장에서 사용자가 수행"},
+  {y:"2020",r:"3",n:"3",cat:"보안",q:"접근통제 정책 3가지를 쓰고 각각 설명하시오.",a:"DAC(임의적): 자원 소유자가 권한 부여\nMAC(강제적): 보안 등급 기반, 시스템이 결정\nRBAC(역할기반): 사용자의 역할에 따라 권한 부여",h:"DAC/MAC/RBAC"},
+  {y:"2020",r:"3",n:"4",cat:"네트워크",q:"IPv4의 IP 주소 클래스에서 A, B, C 클래스의 네트워크/호스트 비트 수를 각각 쓰시오.",a:"A: 네트워크 8비트 / 호스트 24비트\nB: 네트워크 16비트 / 호스트 16비트\nC: 네트워크 24비트 / 호스트 8비트",h:"A=8/24, B=16/16, C=24/8"},
+  {y:"2020",r:"3",n:"6",cat:"데이터베이스",q:"데이터베이스에서 정규화를 하지 않아 발생하는 이상현상(Anomaly) 3가지를 쓰시오.",a:"삽입 이상 (Insertion Anomaly)\n삭제 이상 (Deletion Anomaly)\n갱신 이상 (Update Anomaly)",h:"삽입/삭제/갱신"},
+  {y:"2020",r:"3",n:"7",cat:"운영체제",q:"교착상태(Deadlock)의 발생 조건 4가지를 쓰시오.",a:"상호배제 (Mutual Exclusion)\n점유와 대기 (Hold and Wait)\n비선점 (Non-preemption)\n환형대기 (Circular Wait)",h:"상호배제/점유대기/비선점/환형대기"},
+  {y:"2020",r:"3",n:"9",cat:"소프트웨어공학",q:"GoF 디자인 패턴 중 '생성 패턴'에 해당하는 것 5가지를 쓰시오.",a:"추상 팩토리 (Abstract Factory)\n빌더 (Builder)\n팩토리 메서드 (Factory Method)\n프로토타입 (Prototype)\n싱글턴 (Singleton)",h:"추빌팩프싱"},
+  {y:"2020",r:"3",n:"11",cat:"네트워크",q:"거리 벡터 라우팅 프로토콜로, 최대 홉 수를 15로 제한하며 30초마다 라우팅 정보를 교환하는 프로토콜은?",a:"RIP (Routing Information Protocol)",h:"홉 수 15 제한"},
+  {y:"2020",r:"3",n:"13",cat:"보안",q:"DES, AES, RSA 중 비대칭키(공개키) 암호화 알고리즘은?",a:"RSA (DES, AES는 대칭키)",h:"공개키=비대칭키"},
+  {y:"2020",r:"3",n:"14",cat:"소프트웨어공학",q:"모듈 간의 결합도를 약한 순서에서 강한 순서로 나열하시오.",a:"자료 → 스탬프 → 제어 → 외부 → 공통 → 내용\n암기: 자스제외공내",h:"자스제외공내"},
+  {y:"2020",r:"3",n:"17",cat:"데이터베이스",q:"정규화 과정을 순서대로 쓰시오. (1NF ~ BCNF)",a:"1NF(도메인 원자값) → 2NF(부분종속 제거) → 3NF(이행종속 제거) → BCNF(결정자이면서 후보키 아닌 것 제거)\n암기: 도부이결",h:"도부이결"},
+  {y:"2020",r:"3",n:"19",cat:"네트워크",q:"IP 192.168.1.0/26의 서브넷에서 사용 가능한 호스트 수는?",a:"62개 (블록=64, 호스트=64-2=62)",h:"블록 64, -2"},
+  {y:"2020",r:"3",n:"20",cat:"소프트웨어공학",q:"소프트웨어 형상관리의 절차를 순서대로 쓰시오.",a:"형상 식별 → 형상 통제 → 형상 감사 → 형상 기록\n암기: 식통감기",h:"식통감기"},
+  // ── 2020-4 ──
+  {y:"2020",r:"4",n:"1",cat:"보안",q:"시스템의 데이터를 암호화하여 사용할 수 없도록 만든 후 이를 인질로 금전을 요구하는 악성 소프트웨어는?",a:"랜섬웨어 (Ransomware)",h:"암호화 후 금전 요구"},
+  {y:"2020",r:"4",n:"4",cat:"운영체제",q:"비선점 스케줄링 기법 중 대기 중인 프로세스의 실행 시간(Burst Time)이 가장 짧은 것을 먼저 실행하는 알고리즘은?",a:"SJF (Shortest Job First)",h:"가장 짧은 작업 먼저"},
+  {y:"2020",r:"4",n:"9",cat:"데이터베이스",q:"트랜잭션의 4가지 특성(ACID)을 쓰고 각각 설명하시오.",a:"원자성(Atomicity): 전부 실행 또는 전부 취소\n일관성(Consistency): 실행 전후 일관된 상태 유지\n독립성(Isolation): 동시 실행 시 서로 간섭 불가\n영속성(Durability): 완료된 결과는 영구적 반영\n암기: 원일독영",h:"원일독영"},
+  {y:"2020",r:"4",n:"10",cat:"보안",q:"여러 대의 공격자를 분산 배치하여 동시에 대량의 트래픽을 전송하여 서비스를 마비시키는 공격은?",a:"DDoS (Distributed Denial of Service)",h:"분산 서비스 거부"},
+  {y:"2020",r:"4",n:"12",cat:"네트워크",q:"TCP와 UDP의 차이점을 연결방식, 신뢰성, 속도 측면에서 비교하시오.",a:"TCP: 연결형, 신뢰성 보장, 느림\nUDP: 비연결형, 신뢰성 미보장, 빠름",h:"TCP=신뢰성, UDP=속도"},
+  {y:"2020",r:"4",n:"13",cat:"소프트웨어공학",q:"클래스의 인스턴스가 하나만 생성되도록 보장하고, 어디서든 그 인스턴스에 접근할 수 있도록 하는 디자인 패턴은?",a:"Singleton (싱글턴) 패턴",h:"인스턴스 1개 보장"},
+  {y:"2020",r:"4",n:"15",cat:"소프트웨어공학",q:"애자일 방법론 중 스프린트(Sprint) 단위로 반복 개발하며, 백로그(Backlog)를 관리하는 프레임워크는?",a:"스크럼 (Scrum)",h:"스프린트/백로그"},
+  {y:"2020",r:"4",n:"18",cat:"운영체제",q:"리눅스에서 특정 시간에 명령을 자동 실행하기 위한 명령어는?",a:"crontab\n형식: 분 시 일 월 요일 명령",h:"분 시 일 월 요일"},
+  {y:"2020",r:"4",n:"20",cat:"네트워크",q:"다음 프로토콜의 기본 포트 번호를 쓰시오: FTP, SSH, Telnet, SMTP, DNS, HTTP, HTTPS",a:"FTP:21 / SSH:22 / Telnet:23 / SMTP:25 / DNS:53 / HTTP:80 / HTTPS:443",h:"21,22,23,25,53,80,443"},
+  // ── 2021-1 ──
+  {y:"2021",r:"1",n:"1",cat:"소프트웨어공학",q:"럼바우(Rumbaugh)의 객체지향 분석 기법에서 3가지 모델링을 쓰시오.",a:"객체 모델링 (Object Modeling)\n동적 모델링 (Dynamic Modeling)\n기능 모델링 (Functional Modeling)\n암기: 객동기",h:"객동기"},
+  {y:"2021",r:"1",n:"2",cat:"보안",q:"조합 가능한 모든 암호 문자열을 하나씩 대입하여 암호를 해독하는 공격 방법은?",a:"무차별 대입 공격 / 브루트 포스 (Brute Force) 공격",h:"모든 경우의 수 대입"},
+  {y:"2021",r:"1",n:"4",cat:"데이터베이스",q:"관계대수의 순수 관계 연산자 4가지를 쓰시오.",a:"Select (σ), Project (π), Join (⋈), Division (÷)",h:"σ π ⋈ ÷"},
+  {y:"2021",r:"1",n:"7",cat:"네트워크",q:"OSI 7계층에서 종단 간(End-to-End) 신뢰성 있는 데이터 전송을 보장하는 계층은?",a:"전송 계층 (Transport Layer, 4계층)",h:"4계층, TCP/UDP"},
+  {y:"2021",r:"1",n:"9",cat:"소프트웨어공학",q:"상위 클래스에서 객체를 생성하는 인터페이스를 정의하고, 서브 클래스에서 인스턴스 생성을 결정하는 디자인 패턴은?",a:"Factory Method (팩토리 메서드) 패턴",h:"가상 생성자 패턴"},
+  {y:"2021",r:"1",n:"10",cat:"운영체제",q:"교착상태 해결 방법 3가지 전략을 쓰시오.",a:"예방(Prevention): 발생 조건 제거\n회피(Avoidance): 은행원 알고리즘 등\n탐지 및 회복(Detection & Recovery): 발생 후 처리",h:"예방/회피/탐지및회복"},
+  {y:"2021",r:"1",n:"12",cat:"소프트웨어공학",q:"프로그램 내부 구조를 기반으로 테스트 케이스를 설계하는 것은 ( )박스 테스트이고, 외부 명세를 기반으로 설계하는 것은 ( )박스 테스트이다.",a:"화이트(White)박스 테스트, 블랙(Black)박스 테스트",h:"내부구조=화이트, 외부명세=블랙"},
+  {y:"2021",r:"1",n:"13",cat:"데이터베이스",q:"SQL 명령어를 DDL, DML, DCL로 분류할 때, GRANT와 REVOKE는 어디에 해당하는가?",a:"DCL (Data Control Language, 데이터 제어어)",h:"권한 부여/회수"},
+  {y:"2021",r:"1",n:"16",cat:"운영체제",q:"리눅스에서 파일 소유자를 변경하는 명령어는?",a:"chown (change owner)\n사용법: chown [소유자]:[그룹] 파일명",h:"소유자 변경"},
+  {y:"2021",r:"1",n:"17",cat:"소프트웨어공학",q:"UML에서 시스템이 제공하는 기능을 사용자(Actor) 관점에서 표현한 다이어그램은?",a:"유스케이스(Use Case) 다이어그램",h:"Actor와 기능 관계"},
+  {y:"2021",r:"1",n:"19",cat:"네트워크",q:"192.168.10.0/24 네트워크를 FLSM 방식으로 4개의 서브넷으로 분할할 때 서브넷 마스크는?",a:"255.255.255.192 (/26)\n(2²=4개 서브넷, 블록크기=64)",h:"4개 서브넷 → /26"},
+  {y:"2021",r:"1",n:"20",cat:"소프트웨어공학",q:"소프트웨어 버전 관리 도구 중 중앙 집중형 도구와 분산형 도구를 각각 1가지씩 쓰시오.",a:"중앙 집중형: SVN (Subversion)\n분산형: Git",h:"SVN=중앙, Git=분산"},
+  // ── 2021-2 ──
+  {y:"2021",r:"2",n:"1",cat:"보안",q:"특정 조직을 대상으로 장기간에 걸쳐 지속적으로 해킹 공격을 시도하는 지능형 지속 위협은?",a:"APT (Advanced Persistent Threat)",h:"지능형 지속 위협"},
+  {y:"2021",r:"2",n:"2",cat:"소프트웨어공학",q:"모듈 내부의 기능적 관련성을 나타내는 응집도(Cohesion)의 종류를 약한 순서에서 강한 순서로 나열하시오.",a:"우연적 → 논리적 → 시간적 → 절차적 → 통신적 → 순차적 → 기능적\n암기: 우논시절통순기",h:"우논시절통순기"},
+  {y:"2021",r:"2",n:"4",cat:"데이터베이스",q:"제2정규형(2NF)에서 제3정규형(3NF)으로 변환할 때 제거해야 하는 종속성은?",a:"이행적 함수 종속 (Transitive Dependency)\n(A→B, B→C이면 A→C 관계 제거)",h:"이행적 함수 종속 제거"},
+  {y:"2021",r:"2",n:"7",cat:"운영체제",q:"시분할 시스템에서 타임 슬라이스(Time Quantum)를 이용하여 프로세스를 순환 실행하는 스케줄링은?",a:"RR (Round Robin) 스케줄링",h:"시간 할당량, 순환"},
+  {y:"2021",r:"2",n:"9",cat:"소프트웨어공학",q:"복잡한 객체를 단계별로 생성하여, 같은 생성 절차에서 서로 다른 표현 결과를 만들어내는 디자인 패턴은?",a:"Builder (빌더) 패턴",h:"단계별 객체 생성"},
+  {y:"2021",r:"2",n:"10",cat:"네트워크",q:"TCP에서 연결을 설정할 때 사용하는 3단계 과정의 이름과 순서를 쓰시오.",a:"3-way Handshake\n① SYN → ② SYN+ACK → ③ ACK",h:"SYN / SYN+ACK / ACK"},
+  {y:"2021",r:"2",n:"12",cat:"보안",q:"네트워크 상에서 전송되는 패킷을 몰래 캡처하여 내용을 엿보는 공격 기법은?",a:"스니핑 (Sniffing)",h:"패킷 도청, 수동적 공격"},
+  {y:"2021",r:"2",n:"13",cat:"데이터베이스",q:"하나 이상의 기본 테이블로부터 유도된 가상 테이블로, 물리적으로 저장되지 않는 것은?",a:"뷰 (View)",h:"가상 테이블"},
+  {y:"2021",r:"2",n:"15",cat:"소프트웨어공학",q:"소프트웨어 테스트의 4가지 레벨을 순서대로 쓰시오.",a:"단위 테스트 → 통합 테스트 → 시스템 테스트 → 인수 테스트",h:"단위/통합/시스템/인수"},
+  {y:"2021",r:"2",n:"19",cat:"네트워크",q:"하나의 물리적 네트워크를 여러 개의 논리적 네트워크로 분할하여 브로드캐스트 도메인을 나누는 기술은?",a:"VLAN (Virtual LAN)",h:"논리적 네트워크 분할"},
+  // ── 2021-3 ──
+  {y:"2021",r:"3",n:"2",cat:"소프트웨어공학",q:"소프트웨어 프로세스 성숙도를 5단계로 평가하는 모델은?",a:"CMMI (Capability Maturity Model Integration)\n초기→관리→정의→정량적관리→최적화",h:"5단계 성숙도 모델"},
+  {y:"2021",r:"3",n:"4",cat:"데이터베이스",q:"데이터베이스의 무결성 제약조건 중, 기본키는 NULL이 될 수 없다는 제약은?",a:"개체 무결성 (Entity Integrity)",h:"기본키 NULL 불가"},
+  {y:"2021",r:"3",n:"7",cat:"운영체제",q:"가장 오랫동안 참조되지 않은 페이지를 교체하는 알고리즘은?",a:"LRU (Least Recently Used)",h:"가장 오래된 페이지 교체"},
+  {y:"2021",r:"3",n:"9",cat:"소프트웨어공학",q:"기존 클래스의 인터페이스를 클라이언트가 기대하는 다른 인터페이스로 변환하여 호환성을 제공하는 디자인 패턴은?",a:"Adapter (어댑터) 패턴",h:"인터페이스 변환/호환"},
+  {y:"2021",r:"3",n:"10",cat:"네트워크",q:"IPv4와 IPv6의 주소 길이를 각각 쓰시오.",a:"IPv4: 32비트 (8비트×4 옥텟)\nIPv6: 128비트 (16비트×8 그룹)",h:"IPv4=32bit, IPv6=128bit"},
+  {y:"2021",r:"3",n:"12",cat:"데이터베이스",q:"ERD(개체관계도)의 기본 구성요소 3가지를 쓰시오.",a:"개체(Entity), 관계(Relationship), 속성(Attribute)",h:"개체/관계/속성"},
+  {y:"2021",r:"3",n:"13",cat:"소프트웨어공학",q:"입력값의 경계 부근에서 오류가 발생할 확률이 높다는 점을 이용한 블랙박스 테스트 기법은?",a:"경계값 분석 (Boundary Value Analysis)",h:"경계 입력값 테스트"},
+  {y:"2021",r:"3",n:"15",cat:"보안",q:"웹 페이지에 악성 스크립트를 삽입하여, 해당 페이지를 열람하는 다른 사용자의 정보를 탈취하는 공격은?",a:"XSS (Cross-Site Scripting)",h:"악성 스크립트 삽입"},
+  {y:"2021",r:"3",n:"17",cat:"소프트웨어공학",q:"모듈 내부의 모든 기능이 단일 목적을 위해 수행되는 가장 강한 응집도는?",a:"기능적 응집도 (Functional Cohesion)",h:"가장 강한 응집도"},
+  {y:"2021",r:"3",n:"19",cat:"네트워크",q:"사설 IP를 공인 IP로 변환하는 기술은?",a:"NAT (Network Address Translation)",h:"사설→공인 IP 변환"},
+  {y:"2021",r:"3",n:"20",cat:"소프트웨어공학",q:"UML 행위 다이어그램 중 객체 간 메시지 교환을 시간 순서대로 표현한 것은?",a:"시퀀스(Sequence) 다이어그램",h:"시간 순서 메시지"},
+  // ── 2022-1 ──
+  {y:"2022",r:"1",n:"1",cat:"보안",q:"원격 호스트에 안전하게 접속하기 위해 사용되는 프로토콜로, 포트 22번을 사용하는 것은?",a:"SSH (Secure Shell)",h:"포트 22, 암호화 접속"},
+  {y:"2022",r:"1",n:"2",cat:"소프트웨어공학",q:"요구사항을 기능 요구사항과 비기능 요구사항으로 분류할 때, 성능·보안·품질은 어디에 해당하는가?",a:"비기능 요구사항 (Non-Functional Requirements)",h:"성능/보안/품질=비기능"},
+  {y:"2022",r:"1",n:"4",cat:"데이터베이스",q:"트랜잭션의 격리 수준(Isolation Level) 4가지를 낮은 순서에서 높은 순서로 쓰시오.",a:"Read Uncommitted → Read Committed → Repeatable Read → Serializable",h:"격리 수준 낮→높"},
+  {y:"2022",r:"1",n:"7",cat:"운영체제",q:"상호배제를 위한 동기화 도구로, 정수 변수와 P·V 연산으로 구성되는 것은?",a:"세마포어 (Semaphore)\nP연산: 자원 획득(wait), V연산: 자원 해제(signal)",h:"P=wait, V=signal"},
+  {y:"2022",r:"1",n:"9",cat:"소프트웨어공학",q:"알고리즘을 캡슐화하여, 동일 계열의 알고리즘을 상호 교환 가능하게 하는 디자인 패턴은?",a:"Strategy (전략) 패턴",h:"알고리즘 캡슐화, 교환 가능"},
+  {y:"2022",r:"1",n:"10",cat:"네트워크",q:"IP 네트워크에서 오류 메시지를 전송하는 데 사용되는 프로토콜로, ping 명령이 사용하는 것은?",a:"ICMP (Internet Control Message Protocol)",h:"오류 처리, 제어 메시지, ping"},
+  {y:"2022",r:"1",n:"12",cat:"데이터베이스",q:"데이터베이스에서 데이터 검색 속도를 향상시키기 위한 자료구조는?",a:"인덱스 (Index)\n종류: B-트리, B+트리, 해시 인덱스 등",h:"검색 속도 향상"},
+  {y:"2022",r:"1",n:"13",cat:"소프트웨어공학",q:"테스트 실행에 필요한 환경을 구성하는 요소들의 집합으로, 드라이버, 스텁 등을 포함하는 것은?",a:"테스트 하네스 (Test Harness)",h:"드라이버+스텁+테스트슈트"},
+  {y:"2022",r:"1",n:"15",cat:"보안",q:"신뢰할 수 있는 기관으로 위장하여 이메일·문자 등으로 개인정보를 탈취하는 공격은?",a:"피싱 (Phishing)",h:"위장으로 정보 탈취"},
+  {y:"2022",r:"1",n:"16",cat:"운영체제",q:"리눅스에서 파일 내용 중 특정 패턴을 검색하는 명령어는?",a:"grep\n사용법: grep [패턴] [파일명]",h:"패턴 검색"},
+  {y:"2022",r:"1",n:"17",cat:"소프트웨어공학",q:"읽기 쉽고 변경이 용이한 코드를 작성하기 위한 원칙으로, 의미 있는 이름, 오류 처리 등을 강조하는 것은?",a:"클린 코드 (Clean Code)",h:"코드 품질 개선, 가독성"},
+  {y:"2022",r:"1",n:"19",cat:"네트워크",q:"도메인 이름을 IP 주소로 변환해주는 시스템은?",a:"DNS (Domain Name System) - 포트: 53",h:"도메인→IP 변환"},
+  {y:"2022",r:"1",n:"20",cat:"데이터베이스",q:"데이터베이스 회복 기법 중, 지연 갱신과 즉시 갱신의 차이를 설명하시오.",a:"지연 갱신: 트랜잭션 완료 전까지 DB 변경을 지연 → REDO만 필요\n즉시 갱신: 트랜잭션 실행 중 바로 DB에 반영 → REDO + UNDO 필요",h:"지연=REDO만, 즉시=REDO+UNDO"},
+  // ── 2022-2 ──
+  {y:"2022",r:"2",n:"1",cat:"소프트웨어공학",q:"소프트웨어 비용 산정 기법 중, 원시 코드 라인 수(Lines of Code)를 기반으로 비용을 추정하는 방법은?",a:"LOC (Lines of Code) 기법",h:"코드 라인 수 기반"},
+  {y:"2022",r:"2",n:"2",cat:"데이터베이스",q:"관계대수에서 조건에 맞는 행(튜플)을 선택하는 연산과, 원하는 열(속성)만 추출하는 연산을 각각 쓰시오.",a:"Selection (σ, 셀렉션) / Projection (π, 프로젝션)",h:"σ=행 선택, π=열 추출"},
+  {y:"2022",r:"2",n:"4",cat:"보안",q:"웹 사용자가 자신의 의지와 무관하게 특정 웹사이트에 요청을 보내도록 하는 공격은?",a:"CSRF (Cross-Site Request Forgery)",h:"사용자 의지 없는 요청 위조"},
+  {y:"2022",r:"2",n:"7",cat:"운영체제",q:"FIFO, LRU, LFU 페이지 교체 알고리즘의 기준을 각각 쓰시오.",a:"FIFO: 가장 먼저 들어온 페이지 교체\nLRU: 가장 오래전에 사용된 페이지 교체\nLFU: 사용 빈도가 가장 낮은 페이지 교체",h:"FIFO/LRU/LFU"},
+  {y:"2022",r:"2",n:"9",cat:"소프트웨어공학",q:"기존 객체에 동적으로 새로운 기능을 추가하는 디자인 패턴은?",a:"Decorator (데코레이터) 패턴",h:"동적으로 기능 추가"},
+  {y:"2022",r:"2",n:"10",cat:"네트워크",q:"AS(자율시스템) 내부에서 사용하는 라우팅 프로토콜(IGP)과 외부에서 사용하는 프로토콜(EGP)을 각각 1가지씩 쓰시오.",a:"IGP: OSPF (또는 RIP)\nEGP: BGP",h:"안에는 OSPF, 밖에는 BGP"},
+  {y:"2022",r:"2",n:"17",cat:"소프트웨어공학",q:"객체지향 설계 원칙 SOLID에서 S, O, L, I, D가 의미하는 원칙을 각각 쓰시오.",a:"S: 단일 책임(SRP)\nO: 개방-폐쇄(OCP)\nL: 리스코프 치환(LSP)\nI: 인터페이스 분리(ISP)\nD: 의존 역전(DIP)",h:"단개리인의"},
+  {y:"2022",r:"2",n:"19",cat:"네트워크",q:"IP 주소를 MAC 주소로 변환하는 프로토콜은 ( )이고, MAC 주소를 IP 주소로 변환하는 프로토콜은 ( )이다.",a:"ARP (Address Resolution Protocol) / RARP (Reverse ARP)",h:"ARP=IP→MAC, RARP=MAC→IP"},
+  // ── 2022-3 ──
+  {y:"2022",r:"3",n:"1",cat:"보안",q:"알려지지 않은 보안 취약점을 이용한 공격으로, 패치가 나오기 전에 수행되는 공격은?",a:"제로데이 공격 (Zero Day Attack)",h:"패치 전 취약점 공격"},
+  {y:"2022",r:"3",n:"2",cat:"소프트웨어공학",q:"스크럼(Scrum)에서 2~4주의 반복 개발 주기를 무엇이라 하는가?",a:"스프린트 (Sprint)",h:"반복 개발 주기"},
+  {y:"2022",r:"3",n:"4",cat:"데이터베이스",q:"릴레이션의 키 종류 중, 튜플을 유일하게 식별할 수 있는 속성의 부분집합으로 유일성과 최소성을 만족하는 키는?",a:"후보키 (Candidate Key)\n슈퍼키: 유일성만 / 기본키: 후보키 중 선정 / 대체키: 기본키 아닌 후보키",h:"유일성+최소성"},
+  {y:"2022",r:"3",n:"7",cat:"운영체제",q:"프로세스의 메모리를 고정 크기로 분할하는 것은 페이징이고, 가변 크기로 분할하는 것은?",a:"세그먼테이션 (Segmentation)",h:"가변 크기 분할"},
+  {y:"2022",r:"3",n:"9",cat:"소프트웨어공학",q:"서브시스템의 복잡한 인터페이스를 단순화된 인터페이스로 통합하여 제공하는 디자인 패턴은?",a:"Facade (퍼사드) 패턴",h:"복잡한 인터페이스 단순화"},
+  {y:"2022",r:"3",n:"12",cat:"데이터베이스",q:"데이터베이스 스키마의 3계층을 쓰시오.",a:"외부 스키마 (External Schema)\n개념 스키마 (Conceptual Schema)\n내부 스키마 (Internal Schema)",h:"외부/개념/내부"},
+  {y:"2022",r:"3",n:"13",cat:"소프트웨어공학",q:"통합 테스트에서 상위 모듈부터 하위 모듈로 진행하며, 하위 모듈을 스텁(Stub)으로 대체하는 방식은?",a:"하향식 (Top-Down) 통합 테스트\n(상향식: 드라이버 사용)",h:"하향식=스텁, 상향식=드라이버"},
+  {y:"2022",r:"3",n:"16",cat:"운영체제",q:"리눅스에서 파일 권한 표시 'rwxr-x---'를 8진수로 표현하면?",a:"750",h:"rwx=7, r-x=5, ---=0"},
+  {y:"2022",r:"3",n:"17",cat:"소프트웨어공학",q:"결합도(Coupling)의 종류를 약한 순서에서 강한 순서로 나열하시오.",a:"자료 → 스탬프 → 제어 → 외부 → 공통 → 내용\n암기: 자스제외공내",h:"자스제외공내"},
+  {y:"2022",r:"3",n:"19",cat:"네트워크",q:"TCP/IP 4계층을 순서대로 쓰시오.",a:"네트워크 액세스(링크) → 인터넷 → 전송 → 응용",h:"링크/인터넷/전송/응용"},
+  // ── 2023-1 ──
+  {y:"2023",r:"1",n:"1",cat:"보안",q:"이미 인증된 세션을 가로채어 정상 사용자로 위장하는 공격은?",a:"세션 하이재킹 (Session Hijacking)",h:"세션 가로채기"},
+  {y:"2023",r:"1",n:"2",cat:"소프트웨어공학",q:"시스템의 입력·처리·출력 기능을 계층적으로 나타낸 차트는?",a:"HIPO (Hierarchy plus Input Process Output) 차트",h:"입력/처리/출력 계층 차트"},
+  {y:"2023",r:"1",n:"4",cat:"데이터베이스",q:"BCNF 정규형의 조건을 서술하시오.",a:"모든 결정자가 후보키인 정규형\n(결정자이면서 후보키가 아닌 함수 종속을 제거)",h:"모든 결정자=후보키"},
+  {y:"2023",r:"1",n:"7",cat:"운영체제",q:"프로세스 스케줄링에서 우선순위가 높은 프로세스를 먼저 실행하는 알고리즘은?",a:"Priority (우선순위) 스케줄링",h:"우선순위 기반"},
+  {y:"2023",r:"1",n:"9",cat:"소프트웨어공학",q:"서로 관련된 객체들의 제품군(Family)을 생성하는 인터페이스를 제공하는 디자인 패턴은?",a:"Abstract Factory (추상 팩토리) 패턴",h:"제품군 생성 인터페이스"},
+  {y:"2023",r:"1",n:"10",cat:"네트워크",q:"네트워크 내에서 클라이언트에 IP 주소를 자동으로 할당해주는 프로토콜은?",a:"DHCP (Dynamic Host Configuration Protocol)",h:"IP 자동 할당"},
+  {y:"2023",r:"1",n:"12",cat:"데이터베이스",q:"다수의 트랜잭션이 동시에 실행될 때 데이터 일관성을 유지하기 위한 제어 기법은?",a:"병행 제어 (Concurrency Control)\n기법: 로킹, 타임스탬프, 낙관적 검증",h:"동시성 제어"},
+  {y:"2023",r:"1",n:"13",cat:"소프트웨어공학",q:"프로그램의 복잡도를 측정하는 지표로, V(G) = E - N + 2로 계산하는 것은?",a:"McCabe 순환 복잡도 (Cyclomatic Complexity)",h:"V(G)=E-N+2"},
+  {y:"2023",r:"1",n:"15",cat:"보안",q:"128비트 블록 크기를 사용하는 미국 표준 대칭키 암호화 알고리즘은?",a:"AES (Advanced Encryption Standard)",h:"128비트 블록, 미국 표준"},
+  {y:"2023",r:"1",n:"16",cat:"운영체제",q:"리눅스 cron 표현식에서 각 필드의 순서를 쓰시오.",a:"분 시 일 월 요일",h:"분 시 일 월 요일"},
+  {y:"2023",r:"1",n:"17",cat:"소프트웨어공학",q:"개발 산출물을 전문가들이 모여 검토하는 기술 검토 방법으로, 검토 회의 전 자료 배포가 목표인 것은?",a:"FTR (Formal Technical Review, 공식 기술 검토)",h:"공식 기술 검토"},
+  {y:"2023",r:"1",n:"19",cat:"네트워크",q:"IP 주소 172.16.0.0/20에서 서브넷당 호스트 수는?",a:"4094개\n(호스트 비트 12개: 2¹²-2=4094)",h:"/20 → 호스트비트 12개"},
+  {y:"2023",r:"1",n:"20",cat:"데이터베이스",q:"데이터베이스 무결성 제약조건 3가지를 쓰시오.",a:"개체 무결성: 기본키는 NULL 불가\n참조 무결성: 외래키는 참조 테이블의 기본키 값 또는 NULL\n도메인 무결성: 속성값은 정의된 도메인 범위 내",h:"개체/참조/도메인 무결성"},
+  // ── 2023-2 ──
+  {y:"2023",r:"2",n:"1",cat:"소프트웨어공학",q:"소프트웨어 비용 산정 기법 중, 프로젝트 유형에 따라 Organic, Semi-detached, Embedded로 분류하는 모델은?",a:"COCOMO (Constructive Cost Model)",h:"3가지 유형으로 분류"},
+  {y:"2023",r:"2",n:"2",cat:"보안",q:"사용자의 키 입력을 몰래 기록하여 개인정보를 탈취하는 악성 소프트웨어는?",a:"키로거 (Key Logger)",h:"키 입력 몰래 기록"},
+  {y:"2023",r:"2",n:"4",cat:"데이터베이스",q:"SQL에서 뷰(View)를 생성하는 DDL 구문의 형식을 쓰시오.",a:"CREATE VIEW 뷰명 AS SELECT 문;",h:"CREATE VIEW ~ AS SELECT"},
+  {y:"2023",r:"2",n:"7",cat:"운영체제",q:"다수의 프로세스가 공유 자원에 동시 접근할 때, 한 번에 하나의 프로세스만 접근 가능한 영역은?",a:"임계 구역 (Critical Section)",h:"상호배제 구역"},
+  {y:"2023",r:"2",n:"9",cat:"소프트웨어공학",q:"기존 객체를 복제(Clone)하여 새 객체를 생성하는 디자인 패턴은?",a:"Prototype (프로토타입) 패턴",h:"객체 복제"},
+  {y:"2023",r:"2",n:"10",cat:"네트워크",q:"네트워크 장비의 상태를 모니터링하고 관리하기 위한 프로토콜은?",a:"SNMP (Simple Network Management Protocol) - 포트: 161",h:"장비 모니터링, 포트 161"},
+  {y:"2023",r:"2",n:"12",cat:"데이터베이스",q:"SQL 명령어를 DDL, DML, DCL로 분류할 때, SELECT, INSERT, DELETE, UPDATE는 어디에 해당하는가?",a:"DML (Data Manipulation Language, 데이터 조작어)",h:"데이터 조작"},
+  {y:"2023",r:"2",n:"13",cat:"소프트웨어공학",q:"블랙박스 테스트 기법 중, 입력값을 유사한 그룹으로 나누어 대표값으로 테스트하는 기법은?",a:"동치 분할 (Equivalence Partitioning)",h:"동치 클래스 구간 대표값"},
+  {y:"2023",r:"2",n:"15",cat:"보안",q:"방화벽의 주요 유형 3가지를 쓰시오.",a:"패킷 필터링, 상태 검사(Stateful Inspection), 애플리케이션 게이트웨이(프록시)",h:"패킷필터링/상태검사/프록시"},
+  {y:"2023",r:"2",n:"16",cat:"운영체제",q:"리눅스에서 현재 실행 중인 프로세스를 실시간으로 모니터링하는 명령어는?",a:"top",h:"실시간 프로세스 모니터링"},
+  {y:"2023",r:"2",n:"19",cat:"네트워크",q:"IPv4 헤더의 주요 필드 중, 패킷의 전체 수명을 제한하는 필드는?",a:"TTL (Time To Live)",h:"패킷 수명 제한"},
+  {y:"2023",r:"2",n:"20",cat:"소프트웨어공학",q:"UML 행위 다이어그램 중, 업무 흐름을 시작→분기→병합→종료로 표현한 것은?",a:"활동(Activity) 다이어그램",h:"업무 흐름 표현"},
+  // ── 2023-3 ──
+  {y:"2023",r:"3",n:"1",cat:"보안",q:"문자 메시지(SMS)를 이용하여 악성 링크를 보내 개인정보를 탈취하는 공격은?",a:"스미싱 (Smishing = SMS + Phishing)",h:"SMS 피싱"},
+  {y:"2023",r:"3",n:"2",cat:"소프트웨어공학",q:"요구사항 개발 프로세스를 순서대로 쓰시오.",a:"도출(Elicitation) → 분석(Analysis) → 명세(Specification) → 확인(Validation)\n암기: 도분명확",h:"도분명확"},
+  {y:"2023",r:"3",n:"4",cat:"데이터베이스",q:"트랜잭션의 ACID 특성 중, 트랜잭션의 결과는 전부 반영(Commit)되거나 전부 취소(Rollback)되어야 한다는 성질은?",a:"원자성 (Atomicity)",h:"All or Nothing"},
+  {y:"2023",r:"3",n:"7",cat:"운영체제",q:"디스크 스케줄링에서 현재 헤드 위치에서 가장 가까운 트랙을 먼저 처리하는 알고리즘은?",a:"SSTF (Shortest Seek Time First)",h:"가장 가까운 트랙 먼저"},
+  {y:"2023",r:"3",n:"9",cat:"소프트웨어공학",q:"구현(Implementor)과 추상(Abstraction)을 분리하여 독립적으로 변경할 수 있게 하는 디자인 패턴은?",a:"Bridge (브릿지) 패턴",h:"추상과 구현 분리"},
+  {y:"2023",r:"3",n:"12",cat:"데이터베이스",q:"정규화의 반대 개념으로, 성능 향상을 위해 의도적으로 중복을 허용하는 것은?",a:"반정규화 (Denormalization)",h:"의도적 정규화 위배"},
+  {y:"2023",r:"3",n:"15",cat:"보안",q:"네트워크 침입을 탐지하는 시스템(IDS)과 탐지 후 자동으로 차단까지 하는 시스템(IPS)의 차이는?",a:"IDS: 침입 탐지만 수행 (수동적)\nIPS: 침입 탐지 + 자동 차단 (능동적)",h:"IDS=수동, IPS=능동"},
+  {y:"2023",r:"3",n:"17",cat:"소프트웨어공학",q:"형상관리의 절차를 순서대로 쓰시오.",a:"형상 식별 → 형상 통제 → 형상 감사 → 형상 기록(상태보고)\n암기: 식통감기",h:"식통감기"},
+  {y:"2023",r:"3",n:"19",cat:"네트워크",q:"인터넷을 통해 마치 전용선처럼 안전한 통신을 제공하는 기술은?",a:"VPN (Virtual Private Network)",h:"가상 사설망"},
+  {y:"2023",r:"3",n:"20",cat:"데이터베이스",q:"SQL에서 사용자에게 권한을 부여하는 명령은 ( )이고, 권한을 회수하는 명령은 ( )이다.",a:"GRANT / REVOKE",h:"부여=GRANT, 회수=REVOKE"},
+  // ── 2024-1 ──
+  {y:"2024",r:"1",n:"1",cat:"보안",q:"공격 대상이 자주 방문하는 웹사이트에 악성코드를 심어놓고, 방문 시 감염시키는 공격은?",a:"워터링홀 (Watering Hole) 공격",h:"물웅덩이 공격"},
+  {y:"2024",r:"1",n:"2",cat:"소프트웨어공학",q:"GoF 디자인패턴의 3가지 분류를 쓰시오.",a:"생성(Creational), 구조(Structural), 행위(Behavioral) 패턴",h:"생성/구조/행위"},
+  {y:"2024",r:"1",n:"4",cat:"데이터베이스",q:"제3정규형(3NF)이 되기 위해 제거해야 하는 종속성은?",a:"이행적 함수 종속 (Transitive FD)\nA→B, B→C일 때 A→C를 제거",h:"이행적 함수 종속 제거"},
+  {y:"2024",r:"1",n:"7",cat:"운영체제",q:"페이지 교체 알고리즘 중, 가장 오래전에 사용된 페이지를 교체하는 것은?",a:"LRU (Least Recently Used)",h:"가장 오래전에 사용"},
+  {y:"2024",r:"1",n:"9",cat:"네트워크",q:"OSI 7계층의 각 계층별 대표 프로토콜을 1가지씩 쓰시오.",a:"물리:RS-232 / 데이터링크:HDLC,PPP / 네트워크:IP,ICMP / 전송:TCP,UDP / 세션:SSH,TLS / 표현:JPEG,MPEG / 응용:HTTP,FTP",h:"7계층 대표 프로토콜"},
+  {y:"2024",r:"1",n:"10",cat:"소프트웨어공학",q:"모듈 응집도를 약한 순서에서 강한 순서로 나열하시오.",a:"우연적 → 논리적 → 시간적 → 절차적 → 통신적 → 순차적 → 기능적\n암기: 우논시절통순기",h:"우논시절통순기"},
+  {y:"2024",r:"1",n:"12",cat:"데이터베이스",q:"ERD에서 개체 간의 관계를 1:1, 1:N, N:M으로 표현하는 것을 무엇이라 하는가?",a:"카디널리티 (Cardinality)",h:"관계 비율 표현"},
+  {y:"2024",r:"1",n:"15",cat:"보안",q:"대칭키와 비대칭키 암호화의 차이를 설명하시오.",a:"대칭키: 암복호화 같은 키 사용 (빠름, 키관리 어려움) - DES, AES\n비대칭키: 공개키로 암호화, 개인키로 복호화 (느림, 키관리 쉬움) - RSA",h:"대칭=같은키, 비대칭=공개/개인키"},
+  {y:"2024",r:"1",n:"16",cat:"운영체제",q:"리눅스 chmod 644의 의미를 쓰시오.",a:"소유자: rw- (읽기+쓰기)\n그룹: r-- (읽기)\n기타: r-- (읽기)",h:"rw-r--r--"},
+  {y:"2024",r:"1",n:"17",cat:"소프트웨어공학",q:"UML에서 클래스의 역할을 표현하기 위해 <<interface>>, <<abstract>> 등을 사용하는 것은?",a:"스테레오타입 (Stereotype)\n표기: << >> (길러멧)",h:"<<인터페이스>> 표기"},
+  {y:"2024",r:"1",n:"19",cat:"네트워크",q:"IoT에서 경량 메시징을 위해 사용하며, 발행/구독(Pub/Sub) 방식의 프로토콜은?",a:"MQTT (Message Queuing Telemetry Transport)",h:"Pub/Sub, IoT 경량 메시징"},
+  // ── 2024-2 ──
+  {y:"2024",r:"2",n:"1",cat:"보안",q:"인간의 심리적 취약점을 이용하여 비밀정보를 획득하는 공격 기법은?",a:"사회공학 (Social Engineering) 공격",h:"심리 취약점 이용"},
+  {y:"2024",r:"2",n:"4",cat:"데이터베이스",q:"관계대수의 조인(Join) 종류 중, 공통 속성을 기반으로 동일 값을 가진 튜플만 결합하는 것은?",a:"자연 조인 (Natural Join)\n세타 조인: 비교 연산자 / 동등 조인: = 연산자 / 외부 조인: NULL 포함",h:"공통 속성 기반 결합"},
+  {y:"2024",r:"2",n:"7",cat:"운영체제",q:"프로세스의 5가지 상태를 쓰시오.",a:"생성(New) → 준비(Ready) → 실행(Running) → 대기(Waiting/Blocked) → 종료(Terminated)",h:"생성/준비/실행/대기/종료"},
+  {y:"2024",r:"2",n:"9",cat:"소프트웨어공학",q:"알고리즘의 뼈대를 상위 클래스에서 정의하고, 구체적인 단계는 하위 클래스에서 구현하는 디자인 패턴은?",a:"Template Method (템플릿 메서드) 패턴",h:"뼈대 상위, 구현 하위"},
+  {y:"2024",r:"2",n:"10",cat:"네트워크",q:"192.168.1.0/28 네트워크의 서브넷당 사용 가능한 호스트 수는?",a:"14개 (블록=16, 호스트=16-2=14)",h:"블록 16, -2"},
+  {y:"2024",r:"2",n:"12",cat:"데이터베이스",q:"관계형 DB의 한계를 보완한 비정형 데이터를 처리하는 데이터베이스 유형은?",a:"NoSQL\n유형: Key-Value, Document, Column-Family, Graph",h:"비정형 데이터, 4가지 유형"},
+  {y:"2024",r:"2",n:"15",cat:"보안",q:"웹 애플리케이션 방화벽의 약자와 역할을 쓰시오.",a:"WAF (Web Application Firewall)\nHTTP 트래픽을 분석하여 웹 공격을 탐지·차단",h:"웹 트래픽 분석 방화벽"},
+  {y:"2024",r:"2",n:"17",cat:"소프트웨어공학",q:"스크럼에서 개발할 기능 목록 전체를 관리하는 것은 ( )이고, 하나의 스프린트에서 수행할 목록은 ( )이다.",a:"제품 백로그 (Product Backlog) / 스프린트 백로그 (Sprint Backlog)",h:"제품백로그/스프린트백로그"},
+  {y:"2024",r:"2",n:"19",cat:"신기술/용어",q:"클라우드 서비스 모델 IaaS, PaaS, SaaS를 각각 설명하시오.",a:"IaaS: 인프라(서버,네트워크) 제공 - AWS EC2\nPaaS: 플랫폼(개발환경) 제공 - Heroku\nSaaS: 소프트웨어 제공 - Google Docs",h:"인프라/플랫폼/소프트웨어"},
+  // ── 2024-3 ──
+  {y:"2024",r:"3",n:"1",cat:"보안",q:"IP, ARP, DNS 등을 위조하여 다른 사용자나 시스템을 속이는 공격 기법의 총칭은?",a:"스푸핑 (Spoofing)",h:"위장/속임 공격"},
+  {y:"2024",r:"3",n:"2",cat:"소프트웨어공학",q:"객체의 상태에 따라 동작을 변경하는 디자인 패턴은?",a:"State (상태) 패턴",h:"상태에 따른 동작 변경"},
+  {y:"2024",r:"3",n:"4",cat:"데이터베이스",q:"데이터베이스에서 특정 테이블의 데이터가 변경될 때 자동으로 실행되는 프로시저는?",a:"트리거 (Trigger)",h:"변경 시 자동 실행"},
+  {y:"2024",r:"3",n:"7",cat:"운영체제",q:"선점형 스케줄링에서 현재 실행 중인 프로세스의 남은 시간보다 도착한 프로세스의 실행 시간이 짧으면 교체하는 알고리즘은?",a:"SRTF (Shortest Remaining Time First)",h:"남은 시간이 짧은 것 우선"},
+  {y:"2024",r:"3",n:"9",cat:"네트워크",q:"FTP의 포트번호는 ( )이고, SMTP의 포트번호는 ( )이다.",a:"FTP: 21 / SMTP: 25",h:"FTP=21, SMTP=25"},
+  {y:"2024",r:"3",n:"10",cat:"소프트웨어공학",q:"모듈 간 결합도에서, 다른 모듈의 내부 기능이나 데이터를 직접 참조하는 가장 강한 결합도는?",a:"내용 결합도 (Content Coupling)\n가장 약한 것: 자료 결합도 (Data Coupling)",h:"가장 강=내용, 가장 약=자료"},
+  {y:"2024",r:"3",n:"13",cat:"소프트웨어공학",q:"화이트박스 테스트에서 모든 분기(조건의 참/거짓)를 최소 1회 이상 수행하는 커버리지는?",a:"분기(결정) 커버리지 (Branch/Decision Coverage)",h:"모든 분기 최소 1회"},
+  {y:"2024",r:"3",n:"15",cat:"보안",q:"네트워크 침입 탐지 시스템(IDS)의 탐지 방식 2가지를 쓰시오.",a:"오용 탐지 (Misuse Detection): 알려진 패턴 기반\n이상 탐지 (Anomaly Detection): 정상 패턴 벗어남 감지",h:"오용탐지/이상탐지"},
+  {y:"2024",r:"3",n:"16",cat:"운영체제",q:"리눅스에서 umask 022일 때 파일의 기본 권한은?",a:"644 (rw-r--r--)\n(파일 기본 666 - umask 022 = 644)",h:"666-022=644"},
+  {y:"2024",r:"3",n:"17",cat:"소프트웨어공학",q:"소프트웨어 비용 산정에서 기능의 복잡도를 기반으로 비용을 추정하는 기법은?",a:"기능점수 (FP: Function Point)",h:"기능 복잡도 기반"},
+  {y:"2024",r:"3",n:"19",cat:"네트워크",q:"TCP 헤더와 UDP 헤더에 공통으로 포함되는 필드 2가지는?",a:"출발지 포트 (Source Port) / 목적지 포트 (Destination Port)",h:"출발지/목적지 포트"},
+  // ── 2025-1 ──
+  {y:"2025",r:"1",n:"1",cat:"보안",q:"인증된 세션을 탈취하여 정상 사용자로 위장하는 공격은?",a:"세션 하이재킹 (Session Hijacking)",h:"세션 가로채기"},
+  {y:"2025",r:"1",n:"2",cat:"데이터베이스",q:"데이터베이스 무결성 제약조건 중 개체, 참조, 도메인 무결성을 각각 설명하시오.",a:"개체 무결성: 기본키는 NULL이나 중복 불가\n참조 무결성: 외래키는 참조 테이블의 기본키 값이거나 NULL\n도메인 무결성: 속성값이 정의된 도메인 내의 값",h:"개체/참조/도메인"},
+  {y:"2025",r:"1",n:"3",cat:"네트워크",q:"데이터 전송 오류를 검출하기 위해 다항식을 이용하는 기법은?",a:"CRC (Cyclic Redundancy Check, 순환 중복 검사)",h:"다항식 오류 검출"},
+  {y:"2025",r:"1",n:"4",cat:"보안",q:"사용자에게 가짜 보안 경고를 표시하여 불안감을 조성하고, 불필요한 소프트웨어 구매를 유도하는 악성 소프트웨어는?",a:"스케어웨어 (Scareware)",h:"가짜 경고로 공포 유발"},
+  {y:"2025",r:"1",n:"6",cat:"네트워크",q:"IP 주소를 MAC 주소로 변환하는 프로토콜은 ( )이고, MAC 주소를 IP 주소로 변환하는 프로토콜은 ( )이다.",a:"ARP / RARP",h:"ARP=IP→MAC, RARP=MAC→IP"},
+  {y:"2025",r:"1",n:"8",cat:"데이터베이스",q:"릴레이션에서 튜플의 수를 ( ), 속성의 수를 ( )라 한다.",a:"카디널리티 (Cardinality) / 디그리 (Degree)",h:"카디널리티=행, 디그리=열"},
+  {y:"2025",r:"1",n:"9",cat:"네트워크",q:"192.168.10.0/25 네트워크의 브로드캐스트 주소는?",a:"192.168.10.127\n(블록=128, 0~127 범위, 브로드캐스트=127)",h:"블록 128, 마지막 주소"},
+  {y:"2025",r:"1",n:"12",cat:"소프트웨어공학",q:"결합도 종류에서 '자료 결합도'와 '내용 결합도'는 각각 가장 ( )한 결합도와 가장 ( )한 결합도이다.",a:"자료 결합도: 가장 약한 (좋은)\n내용 결합도: 가장 강한 (나쁜)",h:"자료=약, 내용=강"},
+  {y:"2025",r:"1",n:"14",cat:"소프트웨어공학",q:"기존 클래스의 인터페이스를 클라이언트가 기대하는 다른 인터페이스로 변환하는 디자인 패턴은?",a:"Adapter (어댑터) 패턴",h:"인터페이스 변환/호환"},
+  {y:"2025",r:"1",n:"15",cat:"소프트웨어공학",q:"화이트박스 테스트에서 모든 문장을 최소 1회 이상 실행하는 커버리지는?",a:"문장(구문) 커버리지 (Statement Coverage)",h:"모든 문장 최소 1회"},
+  // ── 2025-2 ──
+  {y:"2025",r:"2",n:"1",cat:"데이터베이스",q:"데이터베이스 인덱스의 접근 방법 중 B-트리와 해시의 차이를 설명하시오.",a:"B-트리: 범위 검색 가능, 정렬된 트리 구조\n해시: 동등 검색만 가능, O(1) 속도",h:"B-트리=범위, 해시=동등"},
+  {y:"2025",r:"2",n:"2",cat:"데이터베이스",q:"릴레이션에서 각 열(Column)의 이름이자 데이터의 특성을 나타내는 것은?",a:"속성 (Attribute)",h:"열의 이름"},
+  {y:"2025",r:"2",n:"3",cat:"보안",q:"원격 호스트에 안전하게 접속하기 위한 프로토콜로, 포트 22번을 사용하는 것은?",a:"SSH (Secure Shell)",h:"포트 22"},
+  {y:"2025",r:"2",n:"4",cat:"운영체제",q:"비선점형 스케줄링에서 실행 시간이 가장 짧은 것을 먼저 실행하는 것은 SJF이고, 선점형 버전은?",a:"SRT (Shortest Remaining Time) / SRTF",h:"SJF의 선점형 버전"},
+  {y:"2025",r:"2",n:"6",cat:"네트워크",q:"10.0.0.0/22 네트워크에서 사용 가능한 호스트 수는?",a:"1022개 (호스트 비트 10개: 2¹⁰-2=1022)",h:"호스트비트 10개"},
+  {y:"2025",r:"2",n:"7",cat:"소프트웨어공학",q:"실제 객체에 대한 접근을 제어하기 위해 대리 객체를 제공하는 디자인 패턴은?",a:"Proxy (프록시) 패턴",h:"대리 객체 제공"},
+  {y:"2025",r:"2",n:"8",cat:"신기술/용어",q:"웹에서 비동기적으로 데이터를 주고받는 기술로, 페이지 전체를 새로고침하지 않고 일부분만 갱신하는 것은?",a:"AJAX (Asynchronous JavaScript and XML)",h:"비동기 부분 업데이트"},
+  {y:"2025",r:"2",n:"12",cat:"데이터베이스",q:"제1정규형(1NF)의 조건을 쓰시오.",a:"모든 속성의 도메인이 원자값(Atomic Value)으로만 구성\n(반복 그룹이나 다중값 속성 제거)",h:"원자값, 반복그룹 제거"},
+  {y:"2025",r:"2",n:"14",cat:"소프트웨어공학",q:"결합도와 응집도에서, 좋은 설계의 방향은?",a:"결합도는 낮게(Loose Coupling)\n응집도는 높게(High Cohesion)",h:"결합도↓ 응집도↑"},
+  {y:"2025",r:"2",n:"18",cat:"운영체제",q:"리눅스에서 파일 내용을 실시간으로 확인하는 명령어는?",a:"tail -f [파일명]",h:"실시간 파일 내용 확인"},
+  {y:"2025",r:"2",n:"19",cat:"보안",q:"SSL/TLS 프로토콜의 역할을 설명하시오.",a:"인터넷에서 데이터를 암호화하여 안전하게 전송\n(HTTPS = HTTP + SSL/TLS)",h:"데이터 암호화 전송"},
+  // ── 2025-3 ──
+  {y:"2025",r:"3",n:"1",cat:"보안",q:"IP, ARP, DNS 등을 위조하여 상대방을 속이는 공격 기법은?",a:"스푸핑 (Spoofing)",h:"위장/속임 공격"},
+  {y:"2025",r:"3",n:"2",cat:"소프트웨어공학",q:"요구사항 분석 기법 중, 사용자 스토리와 유스케이스의 차이를 설명하시오.",a:"사용자 스토리: 사용자 관점의 간단한 기능 설명 (As a ~, I want ~)\n유스케이스: 시스템과 액터 간 상호작용을 상세히 기술",h:"스토리=간단, 유스케이스=상세"},
+  {y:"2025",r:"3",n:"4",cat:"데이터베이스",q:"트랜잭션 격리 수준 중 가장 높은 것은?",a:"Serializable (직렬화)\nDirty Read, Non-Repeatable Read, Phantom Read 모두 차단",h:"모든 이상 현상 방지"},
+  {y:"2025",r:"3",n:"7",cat:"운영체제",q:"다수의 프로세스가 공유 자원에 접근할 때, 동시 접근을 제어하는 기법의 총칭은?",a:"동기화 (Synchronization)\n기법: 뮤텍스, 세마포어, 모니터",h:"동시 접근 제어"},
+  {y:"2025",r:"3",n:"9",cat:"소프트웨어공학",q:"요청을 객체로 캡슐화하여, 매개변수로 다양한 요청을 전달할 수 있게 하는 디자인 패턴은?",a:"Command (커맨드) 패턴",h:"요청을 객체로 캡슐화"},
+  {y:"2025",r:"3",n:"10",cat:"네트워크",q:"TCP의 흐름 제어와 혼잡 제어를 각각 설명하시오.",a:"흐름 제어: 송신측이 수신측 처리 속도에 맞춰 전송량 조절 (슬라이딩 윈도우)\n혼잡 제어: 네트워크 혼잡 시 전송량 감소 (Slow Start, AIMD)",h:"흐름=수신속도, 혼잡=네트워크 부하"},
+  {y:"2025",r:"3",n:"12",cat:"데이터베이스",q:"SQL에서 사용자에게 테이블의 SELECT 권한을 부여하는 구문을 쓰시오.",a:"GRANT SELECT ON 테이블명 TO 사용자;",h:"GRANT SELECT ON ~ TO ~"},
+  {y:"2025",r:"3",n:"13",cat:"소프트웨어공학",q:"경험 기반 테스트 기법 중, 테스터의 경험과 직관을 활용하는 방법은?",a:"탐색적 테스트 (Exploratory Testing)\n또는 오류 추정 기법 (Error Guessing)",h:"경험과 직관 활용"},
+  {y:"2025",r:"3",n:"15",cat:"보안",q:"해시 함수 SHA의 특징을 설명하시오.",a:"SHA (Secure Hash Algorithm)\n임의 길이 데이터를 고정 길이 해시값으로 변환\n단방향 함수 (역산 불가), 무결성 검증에 사용",h:"단방향, 고정 길이 출력"},
+  {y:"2025",r:"3",n:"16",cat:"운영체제",q:"리눅스에서 텍스트 치환에 사용하는 명령어는?",a:"sed (Stream Editor)\n사용법: sed 's/원본/대체/g' 파일명",h:"스트림 편집기"},
+  {y:"2025",r:"3",n:"17",cat:"소프트웨어공학",q:"소프트웨어 품질 측정을 위한 지표의 총칭으로, 복잡도·결합도·결함밀도 등이 포함되는 것은?",a:"소프트웨어 메트릭 (Software Metric)",h:"품질 측정 지표"},
+  {y:"2025",r:"3",n:"19",cat:"네트워크",q:"네트워크의 제어 평면과 데이터 평면을 분리하여 소프트웨어로 네트워크를 관리하는 기술은?",a:"SDN (Software Defined Networking)",h:"소프트웨어 정의 네트워크"},
+];
+
+let mode = 'seq';
+let filteredOrder = [];
+let cur = 0;
+let results = {};
+let wrongSet = new Set();
+let correctCount = 0, wrongCount = 0, skipCount = 0;
+let answered = false;
+
+function buildOrder() {
+  if (mode === 'seq') {
+    filteredOrder = [...Array(QS.length).keys()];
+  } else if (mode === 'rand') {
+    filteredOrder = [...Array(QS.length).keys()];
+    for (let i = filteredOrder.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [filteredOrder[i], filteredOrder[j]] = [filteredOrder[j], filteredOrder[i]];
+    }
+  } else {
+    filteredOrder = wrongSet.size > 0 ? [...wrongSet] : [...Array(QS.length).keys()];
+  }
+}
+
+function setMode(m, btn) {
+  mode = m;
+  document.querySelectorAll('.mode-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  buildOrder(); cur = 0; render();
+}
+
+function currentIdx() { return filteredOrder[cur]; }
+
+function render() {
+  const idx = currentIdx();
+  const q = QS[idx];
+  answered = !!results[idx];
+
+  const total = filteredOrder.length;
+  const pct = ((cur + 1) / total * 100).toFixed(1);
+  document.getElementById('prog-label').textContent = `${cur + 1} / ${total}`;
+  document.getElementById('prog-pct').textContent = pct + '%';
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('sc-correct').textContent = correctCount;
+  document.getElementById('sc-wrong').textContent = wrongCount;
+  document.getElementById('sc-skip').textContent = skipCount;
+
+  const prevResult = results[idx];
+  const color = CAT_COLOR[q.cat] || '#666';
+
+  let cardClass = 'q-card';
+  if (prevResult === 'correct') cardClass += ' answered correct-state';
+  else if (prevResult === 'wrong') cardClass += ' answered wrong-state';
+
+  const ansLines = q.a.split('\n').map(l => `<div>${l}</div>`).join('');
+  const statusIcon = prevResult === 'correct' ? '✓ 정답' : prevResult === 'wrong' ? '✗ 오답' : '미응답';
+  const statusColor = prevResult === 'correct' ? 'var(--green)' : prevResult === 'wrong' ? 'var(--red)' : 'var(--text3)';
+
+  document.getElementById('q-container').innerHTML = `
+    <div class="${cardClass}" id="q-card">
+      <div class="q-meta">
+        <div class="q-meta-left">
+          <span class="q-number">Q${String(idx + 1).padStart(3,'0')}</span>
+          <span class="q-source">${q.y}년 ${q.r}회차 ${q.n}번</span>
+          <span class="q-cat-badge" style="background:${color}">${q.cat}</span>
+        </div>
+        <span class="q-status-tag" style="color:${statusColor}">${statusIcon}</span>
+      </div>
+      <div class="q-text">${q.q}</div>
+      <button class="hint-toggle" onclick="toggleHint(this)" id="hint-btn">
+        <span>💡</span> 힌트 보기
+      </button>
+      <div class="hint-box" id="hint-box">${q.h}</div>
+      <div class="input-area">
+        <input class="ans-input" id="ans-inp" type="text"
+          placeholder="답을 입력하세요..."
+          ${answered ? 'disabled' : ''}
+          onkeydown="if(event.key==='Enter')checkAns()">
+        <button class="check-btn" onclick="checkAns()" ${answered ? 'disabled' : ''}>확인</button>
+      </div>
+      <div class="result-area ${prevResult || ''}" id="result-area" style="display:${prevResult ? 'block' : 'none'}">
+        <div class="result-header">
+          ${prevResult === 'correct' ? '✓ 정답입니다!' : prevResult === 'wrong' ? '✗ 틀렸습니다.' : ''}
+        </div>
+        <div class="result-answer" style="display:${prevResult ? 'block' : 'none'}">
+          <div class="result-answer-label">정답</div>
+          <div class="result-answer-text">${ansLines}</div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  updateFooter();
+  if (!answered) setTimeout(() => { const inp = document.getElementById('ans-inp'); if (inp) inp.focus(); }, 80);
+}
+
+function toggleHint(btn) {
+  const box = document.getElementById('hint-box');
+  const show = box.style.display === 'block';
+  box.style.display = show ? 'none' : 'block';
+  btn.innerHTML = `<span>💡</span> ${show ? '힌트 보기' : '힌트 숨기기'}`;
+}
+
+function normalize(s) {
+  return s.replace(/[\s\(\)\[\]①②③④⑤\-\/]/g, '').toLowerCase();
+}
+
+function checkAns() {
+  if (answered) return;
+  const idx = currentIdx();
+  const q = QS[idx];
+  const inp = document.getElementById('ans-inp');
+  const val = inp.value.trim();
+  if (!val) { inp.focus(); return; }
+
+  const nVal = normalize(val);
+  const nAns = normalize(q.a);
+  // 첫 번째 키워드와도 비교
+  const firstKw = normalize(q.a.split('\n')[0]);
+  const correct = nVal === nAns || nAns.includes(nVal) || firstKw.includes(nVal) ||
+    (nVal.length >= 3 && nAns.includes(nVal));
+
+  answered = true;
+  inp.disabled = true;
+  document.querySelector('.check-btn').disabled = true;
+
+  if (correct) {
+    results[idx] = 'correct'; wrongSet.delete(idx); correctCount++;
+  } else {
+    results[idx] = 'wrong'; wrongSet.add(idx); wrongCount++;
+  }
+
+  const card = document.getElementById('q-card');
+  if (!correct) {
+    card.classList.add('shake');
+    setTimeout(() => card.classList.remove('shake'), 400);
+  }
+  card.classList.add('answered', correct ? 'correct-state' : 'wrong-state');
+
+  const ra = document.getElementById('result-area');
+  ra.className = 'result-area ' + (correct ? 'correct' : 'wrong');
+  ra.style.display = 'block';
+  ra.querySelector('.result-header').textContent = correct ? '✓ 정답입니다!' : '✗ 틀렸습니다.';
+  ra.querySelector('.result-answer').style.display = 'block';
+
+  const statusTag = card.querySelector('.q-status-tag');
+  statusTag.style.color = correct ? 'var(--green)' : 'var(--red)';
+  statusTag.textContent = correct ? '✓ 정답' : '✗ 오답';
+
+  updateFooter();
+}
+
+function updateFooter() {
+  const done = Object.keys(results).length;
+  document.getElementById('footer-info').textContent = `${done}/${filteredOrder.length} 응답 완료`;
+  document.getElementById('sc-correct').textContent = correctCount;
+  document.getElementById('sc-wrong').textContent = wrongCount;
+  document.getElementById('sc-skip').textContent = skipCount;
+}
+
+function go(dir) {
+  cur += dir;
+  if (cur < 0) cur = filteredOrder.length - 1;
+  if (cur >= filteredOrder.length) cur = 0;
+  render();
+}
+
+function skipQ() { skipCount++; go(1); }
+
+function resetAll() {
+  results = {}; wrongSet = new Set();
+  correctCount = 0; wrongCount = 0; skipCount = 0;
+  cur = 0; buildOrder(); render();
+}
+
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT') return;
+  if (e.key === 'ArrowRight') go(1);
+  else if (e.key === 'ArrowLeft') go(-1);
+  else if (e.key === 'h' || e.key === 'H') {
+    const btn = document.getElementById('hint-btn');
+    if (btn) btn.click();
+  }
+});
+
+buildOrder();
+render();
+</script>
+</body>
+</html>
